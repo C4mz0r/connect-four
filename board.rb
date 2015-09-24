@@ -1,8 +1,10 @@
 require 'colorize'
 
+WIDTH = 7
+HEIGHT = 6
+
 class Board
-	WIDTH = 7
-	HEIGHT = 6
+
 	
 	attr_accessor :play_area
 
@@ -28,8 +30,48 @@ class Board
 
 	end
 
+	# Returns the symbol referring to the winning player
+	# Returns false if no winner
 	def hasWinner?
+		found_winner = false
 
+		# Horizontal checking
+		0.upto(HEIGHT-1) do |row|			
+			0.upto(WIDTH-4) do |i|				
+				if !@play_area[row][i].nil? and
+				@play_area[row][i] == @play_area[row][i+1] and
+				@play_area[row][i+1] == @play_area[row][i+2] and
+				@play_area[row][i+2] == @play_area[row][i+3]
+				then				
+					found_winner = play_area[row][i]
+					break
+				end
+			end
+			
+		end
+	
+		# Vertical checking
+		0.upto(WIDTH-1) do |col|
+			0.upto(HEIGHT-4) do |i|
+				if !@play_area[i][col].nil? and
+				@play_area[i][col] == @play_area[i+1][col] and
+				@play_area[i+1][col] == @play_area[i+2][col] and
+				@play_area[i+2][col] == @play_area[i+3][col]
+				then
+					found_winner = play_area[i][col]
+					break
+				end
+			end
+		end
+
+		# Main diagonal checking (moving down and to the right)
+		0.upto(HEIGHT-1) do |row|
+			# TODO
+		end
+
+		# Alternative diagonal checking (moving up and to the right)
+
+		found_winner
 	end
 
 	private

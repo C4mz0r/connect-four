@@ -59,13 +59,93 @@ describe Board do
 		end		
 	end
 
-	describe("#hasWinner") do
-		it "should find winners horizontally" do
-			@board.play_area[0][1] = 'v'
-			@board.play_area[0][2] = 'v'
-			@board.play_area[0][3] = 'v'
-			@board.play_area[0][4] = 'v'
-			expect(@board.hasWinner).to eq(true)
+	describe("#hasWinner?") do
+		context 'when there is a horizontal winner' do
+			it "should find winners horizontally (top row edge case)" do
+				@board.play_area[0][1] = 'h'
+				@board.play_area[0][2] = 'h'
+				@board.play_area[0][3] = 'h'
+				@board.play_area[0][4] = 'h'
+				expect(@board.hasWinner?).to eq('h')
+			end
+
+			it "should find winners horizontally (bottom row edge case)" do
+				@board.play_area[5][1] = 'h'
+				@board.play_area[5][2] = 'h'
+				@board.play_area[5][3] = 'h'
+				@board.play_area[5][4] = 'h'
+				expect(@board.hasWinner?).to eq('h')
+			end
+
+			it "should find winners horizontally (left column edge case)" do
+				@board.play_area[0][0] = 'h'
+				@board.play_area[0][1] = 'h'
+				@board.play_area[0][2] = 'h'
+				@board.play_area[0][3] = 'h'
+				expect(@board.hasWinner?).to eq('h')
+			end
+
+			it "should find winners horizontally (right column edge case)" do
+				@board.play_area[0][3] = 'h'
+				@board.play_area[0][4] = 'h'
+				@board.play_area[0][5] = 'h'
+				@board.play_area[0][6] = 'h'
+				expect(@board.hasWinner?).to eq('h')
+			end
+		end
+
+		context 'when there is a vertical winner' do
+			it "should find winners vertically (left column edge case)" do
+				@board.play_area[1][0] = 'v'
+				@board.play_area[2][0] = 'v'
+				@board.play_area[3][0] = 'v'
+				@board.play_area[4][0] = 'v'
+				expect(@board.hasWinner?).to eq('v')
+			end
+
+			it "should find winners vertically (right column edge case)" do
+				@board.play_area[0][6] = 'v'
+				@board.play_area[1][6] = 'v'
+				@board.play_area[2][6] = 'v'
+				@board.play_area[3][6] = 'v'
+				expect(@board.hasWinner?).to eq('v')
+			end
+
+			it "should find winners vertically (top row edge case)" do
+				@board.play_area[0][0] = 'v'
+				@board.play_area[1][0] = 'v'
+				@board.play_area[2][0] = 'v'
+				@board.play_area[3][0] = 'v'
+				expect(@board.hasWinner?).to eq('v')
+			end
+
+			it "should find winners horizontally (bottom row edge case)" do
+				@board.play_area[2][6] = 'v'
+				@board.play_area[3][6] = 'v'
+				@board.play_area[4][6] = 'v'
+				@board.play_area[5][6] = 'v'
+				expect(@board.hasWinner?).to eq('v')
+			end
+		end
+
+		context 'when there is a main diagonal winner' do
+			it "should find winners diagonally (top left edge case)" do
+				@board.play_area[0][0] = 'v'
+				@board.play_area[1][1] = 'v'
+				@board.play_area[2][2] = 'v'
+				@board.play_area[3][3] = 'v'
+				expect(@board.hasWinner?).to eq('v')
+			end
+
+			it "should find winners diagonally (bottom right edge case)" do
+				@board.play_area[2][3] = 'd'
+				@board.play_area[3][4] = 'd'
+				@board.play_area[4][5] = 'd'
+				@board.play_area[5][6] = 'd'
+				expect(@board.hasWinner?).to eq('d')
+			end
+
+			
 		end
 	end
 end
