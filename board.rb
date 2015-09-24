@@ -27,7 +27,7 @@ class Board
 	end
 
 	def boardFull?
-
+		!@play_area.flatten.include?nil
 	end
 
 	# Returns the symbol referring to the winning player
@@ -65,13 +65,51 @@ class Board
 		end
 
 		# Main diagonal checking (moving down and to the right)
-		0.upto(HEIGHT-1) do |row|
-			# TODO
+		0.upto(HEIGHT-4) do |row|
+			0.upto(WIDTH-4) do |col|
+				if !@play_area[row][col].nil? and
+				@play_area[row][col] == @play_area[row+1][col+1] and
+				@play_area[row+1][col+1] == @play_area[row+2][col+2] and
+				@play_area[row+2][col+2] == @play_area[row+3][col+3]
+				then
+					found_winner = play_area[row][col]
+					break
+				end	
+			end
 		end
 
 		# Alternative diagonal checking (moving up and to the right)
+		(HEIGHT-1).downto(0) do |row|
+			0.upto(WIDTH-4) do |col|
+				if !@play_area[row][col].nil? and
+				@play_area[row][col] == @play_area[row-1][col+1] and
+				@play_area[row-1][col+1] == @play_area[row-2][col+2] and
+				@play_area[row-2][col+2] == @play_area[row-3][col+3]
+				then
+					found_winner = play_area[row][col]
+					break
+				end	
+			end
+		end
 
 		found_winner
+	end
+
+	def display
+		puts @play_area.inspect
+		0.upto(HEIGHT-1) do |r|
+			0.upto(WIDTH-1) do |c|
+				case @play_area[r][c] 
+				when :red 
+					print "  ".colorize(:background => :red)
+				when :blue
+					print "  ".colorize(:background => :blue)
+				else 
+					print "  ".colorize(:background => :white)
+				end
+			end
+			puts
+		end
 	end
 
 	private

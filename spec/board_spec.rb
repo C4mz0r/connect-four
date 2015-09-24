@@ -60,6 +60,24 @@ describe Board do
 	end
 
 	describe("#hasWinner?") do
+		context 'when there is no winner' do
+			it "should return false when board is empty" do
+				expect(@board.hasWinner?).to eq(false)
+			end
+
+			it "should return false when there are not 4 consecutive pieces" do
+				mark_it = false
+				0.upto(HEIGHT-1) do |r|
+					0.upto(WIDTH-1) do |c|
+						@board.play_area[r][c] = 'x' if mark_it == true and r % 2 == 0
+						@board.play_area[r][c] = 'y' if mark_it == true and r % 2 == 1
+						mark_it = !mark_it
+					end					
+				end
+				expect(@board.hasWinner?).to eq(false)
+			end
+		end
+		
 		context 'when there is a horizontal winner' do
 			it "should find winners horizontally (top row edge case)" do
 				@board.play_area[0][1] = 'h'
@@ -145,7 +163,70 @@ describe Board do
 				expect(@board.hasWinner?).to eq('d')
 			end
 
-			
+			it "should find winners diagonally (not touching edges)" do
+				@board.play_area[1][1] = 'd'
+				@board.play_area[2][2] = 'd'
+				@board.play_area[3][3] = 'd'
+				@board.play_area[4][4] = 'd'
+				expect(@board.hasWinner?).to eq('d')
+			end			
+		end
+
+		context 'when there is a alternate diagonal winner' do
+			it "should find winners diagonally (bottom left edge case)" do
+				@board.play_area[5][0] = 'a'
+				@board.play_area[4][1] = 'a'
+				@board.play_area[3][2] = 'a'
+				@board.play_area[2][3] = 'a'
+				expect(@board.hasWinner?).to eq('a')
+			end
+
+			it "should find winners diagonally (top right edge case)" do
+				@board.play_area[0][6] = 'a'
+				@board.play_area[1][5] = 'a'
+				@board.play_area[2][4] = 'a'
+				@board.play_area[3][3] = 'a'
+				expect(@board.hasWinner?).to eq('a')
+			end
+
+			it "should find winners diagonally (not touching edges)" do
+				@board.play_area[1][4] = 'a'
+				@board.play_area[2][3] = 'a'
+				@board.play_area[3][2] = 'a'
+				@board.play_area[4][1] = 'a'
+				expect(@board.hasWinner?).to eq('a')
+			end			
+		end
+	end
+	
+	describe "#boardFull?" do
+		context "when the board is full" do
+			it "should return true" do
+				0.upto(HEIGHT-1) do |r|
+					0.upto(WIDTH-1) do |c|
+						@board.play_area[r][c] = 'f'
+					end
+				end
+				expect(@board.boardFull?).to eq(true)
+			end	
+		end
+
+		context "when the board is empty" do
+			it "should return false" do
+				expect(@board.boardFull?).to eq(false)
+			end
+		end
+
+		context "when the board has at least one empty space" do
+			it "should return false" do 
+				0.upto(HEIGHT-1) do |r|
+					0.upto(WIDTH-1) do |c|
+						@board.play_area[r][c] = 'f'
+					end
+				end
+				@board.play_area[3][3] = nil
+				expect(@board.boardFull?).to eq(false)
+			end
 		end
 	end
 end
